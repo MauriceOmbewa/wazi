@@ -1,0 +1,223 @@
+<div class="w-full bg-gray-50 font-fredoka min-h-screen">
+  <!-- Header -->
+  <div class="px-4 py-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
+    <a href="/teacher/grade1/mathematics/algebra" class="font-fredoka font-bold text-[16px] text-[#9333EA] hover:underline mb-3 inline-block">
+      ← Back to subtopics
+    </a>
+    
+    <div class="mb-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 class="font-fredoka font-bold text-[65px] leading-[64px] tracking-[-0.4px] text-[#374151] mb-2">
+            Addition
+          </h1>
+          <p class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-[#374151] mb-4 md:mb-0">
+            Manage lesson notes for this subtopic
+          </p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
+          <button 
+            (click)="toggleForm()" 
+            class="w-[363px] h-[83px] bg-gradient-to-r from-emerald-400 to-[#5B7FFF] hover:from-emerald-500 hover:to-[#4A6FFF] text-white font-bold py-[20px] px-[55px] rounded-[20px] text-[16px] border-none transition-all duration-200">
+            + Add Video & Notes
+          </button>
+          <button class="w-[285px] h-[83px] bg-gradient-to-r from-[#C57CF0] to-[#EA4C9F] text-white font-bold py-[20px] px-[55px] rounded-[20px] text-[16px] border-none">
+            + Create Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="px-4 pb-4 md:px-8 lg:px-12 max-w-6xl mx-auto">
+
+      <!-- ADD NEW LESSON FORM (Animated) -->
+      <div *ngIf="isFormOpen" [@expandCollapse]="isFormOpen ? 'expanded' : 'collapsed'" class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm mb-4">
+        <h2 class="font-semibold text-[20px] text-[#374151] mb-4">
+          Add New Note
+        </h2>
+        
+        <form [formGroup]="lessonForm" (ngSubmit)="saveLesson()">
+          
+          <!-- Video URL -->
+          <div class="pb-[40px]">
+            <label class="block font-fredoka font-semibold text-[25px] leading-[20px] tracking-[-0.4px] align-middle text-[#374151] mb-2">
+              Video URL
+            </label>
+            <input type="url" formControlName="videoUrl" placeholder="https://..." class="mt-[10px] w-full h-[79px] bg-white border-gray-200 border-[2px] rounded-[20px] px-[20px] py-[25px] font-fredoka font-normal text-[23px] leading-[29px] tracking-[-0.4px] text-[#374151] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+  
+          <!-- Yellow Notes Section -->
+          <div class="bg-[#FEFCE8] rounded-xl p-6 border border-[#FEF08A] mb-6 shadow-[0_6px_30px_0_rgba(0,0,0,0.1)]">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-[72px] h-[71px] bg-[#FFF0BF] flex items-center justify-center rounded text-white">
+                <img src="./assets/icons/image 27.png" alt="files" class="w-[42px] h-[42px]">
+              </div>
+              <h3 class="font-fredoka font-bold text-[35px] leading-[40px] tracking-[-0.4px] text-[#374151]">
+                Lesson Notes
+              </h3>
+            </div>
+            <p class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-[#374151] mb-6">
+              Add helpful notes that students can read while watching the lesson. Use different note types to organize information.
+            </p>
+  
+            <!-- Dynamic Notes Array -->
+            <div formArrayName="notes">
+              <div *ngFor="let note of notes.controls; let i=index" [formGroupName]="i" class="bg-white relative mb-4 h-[693px] rounded-[23px] border border-[#E5E7EB] p-[30px] shadow-sm flex flex-col gap-[30px]">
+                
+                <!-- Remove Button -->
+                <div class="h-[30px] flex justify-end">
+                  <span (click)="removeNote(i)" class="inline-flex items-center justify-center text-[30px] leading-[30px] font-semibold text-[#FC0A0A] cursor-pointer">
+                    X
+                  </span>
+                </div>
+
+                <div class="gap-[40px]">
+                  <div class="mb-4">
+                    <label class="block font-fredoka font-semibold text-[25px] leading-[20px] tracking-[-0.4px] text-[#374151] mb-1">
+                      Note Type
+                    </label>
+                    <select formControlName="type" required class="w-full mt-[10px] h-[79px] bg-white border-gray-200 border-[2px] rounded-[20px] px-[20px] py-[25px] font-fredoka font-normal text-[23px] leading-[29px] tracking-[-0.4px] focus:outline-none focus:ring-2 focus:ring-[#9333EA]" [style.color]="note.get('type')?.value ? '#374151' : '#BBC2CD'">
+                      <option value="" disabled selected hidden>Select Note Type</option>
+                      <option *ngFor="let t of noteTypes" [value]="t.value" class="font-fredoka font-normal text-[23px] leading-[29px] tracking-[-0.4px] text-[#374151] hover:bg-[#9333EA] hover:text-white">{{t.label}}</option>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label class="block font-fredoka font-semibold text-[25px] leading-[20px] tracking-[-0.4px] text-[#374151] mb-1">
+                      Note Title (Optional)
+                    </label>
+                    <input placeholder="e.g How to identify word problems" formControlName="title" class="mt-[10px] w-full h-[79px] bg-white border-gray-200 border-[2px] rounded-[20px] px-[20px] py-[25px] font-fredoka font-normal text-[23px] leading-[29px] tracking-[-0.4px] text-[#374151] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  </div>
+    
+                  <!-- Rich Text Editor -->
+                  <div>
+                    <label class="block font-fredoka font-semibold text-[25px] leading-[20px] tracking-[-0.4px] text-[#374151] mb-1">
+                      Note Content
+                    </label>
+                    <div class="border border-gray-300 rounded-lg overflow-hidden bg-white h-[230px]">
+                      <!-- Comprehensive Toolbar -->
+                      <div class="bg-gray-50 border-b border-gray-200 p-2 flex gap-2 text-gray-500 items-center">
+                        <span class="font-bold cursor-pointer hover:text-black px-1">B</span>
+                        <span class="italic cursor-pointer hover:text-black px-1">I</span>
+                        <span class="underline cursor-pointer hover:text-black px-1">U</span>
+                        <span class="line-through cursor-pointer hover:text-black px-1">S</span>
+                        <span class="cursor-pointer hover:text-black px-1">A</span>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">edit</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">sentiment_satisfied</mat-icon>
+                        <span class="border-l border-gray-300 mx-1 h-4"></span>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_align_left</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_align_center</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_list_bulleted</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_list_numbered</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_indent_increase</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">format_indent_decrease</mat-icon>
+                        <span class="border-l border-gray-300 mx-1 h-4"></span>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">image</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">link</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">attach_file</mat-icon>
+                        <span class="border-l border-gray-300 mx-1 h-4"></span>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">undo</mat-icon>
+                        <mat-icon class="text-[16px] cursor-pointer hover:text-black">redo</mat-icon>
+                      </div>
+                      <textarea formControlName="content" class="w-full p-3 outline-none resize-none font-fredoka text-[16px] placeholder:font-fredoka placeholder:text-gray-400 h-[calc(100%-50px)]" placeholder="Type here..."></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Add Note Button -->
+            <button type="button" (click)="addNote()" class="w-full h-[70px] border-[2px] py-3 bg-[#FEF08A] cursor-pointer text-[#AA9600] font-fredoka font-semibold text-[25px] leading-[40px] tracking-[-0.4px] rounded-lg text-center transition-colors flex items-center justify-center gap-2">
+              + Add Another Note
+            </button>
+          </div>
+  
+          <!-- Form Actions -->
+          <div class="flex gap-3">
+            <button type="submit" class="h-[70px] w-[200px] bg-[#29AA58] hover:bg-green-600 text-white font-fredoka font-semibold text-[25px] leading-[40px] tracking-[-0.4px] rounded-lg transition-colors shadow-sm flex items-center justify-center">
+              Save Subject
+            </button>
+            <button type="button" (click)="cancel()" class="h-[70px] w-[136px] bg-[#E9E9E9] hover:bg-gray-300 text-[#6B6B6B] font-fredoka font-semibold text-[25px] leading-[40px] tracking-[-0.4px] rounded-lg transition-colors flex items-center justify-center">
+              Cancel
+            </button>
+          </div>
+  
+        </form>
+      </div>
+  
+      <!-- EXISTING LESSONS LIST -->
+      <div class="mb-6">
+        <h3 class="font-fredoka font-semibold text-[40px] leading-[40px] tracking-[-0.4px] text-left text-[#374151] mb-3">
+          Existing Lessons
+        </h3>
+      
+        <div class="space-y-3">
+          <div *ngFor="let lesson of existingLessons" class="bg-white rounded-2xl border-2 border-green-300 p-4 shadow-sm">
+            
+            <!-- Card Header -->
+            <div class="mb-3">
+            </div>
+    
+            <!-- Duration and Notes Count -->
+            <div class="flex items-center gap-4 mb-3 font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-500">
+              <span><img src="assets/icons/image 35.png" alt="Duration Icon" class="w-6 h-6 inline" /> {{ lesson.duration || '8 minutes' }}</span>
+<span><img src="assets/icons/image 27.png" alt="Notes Icon" class="w-6 h-6 inline" /> {{ lesson.notesCount || 5 }} notes attached</span>
+
+            </div>
+    
+            <!-- Attached Notes Preview -->
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] font-semibold text-gray-700"><img src="assets/icons/image 27.png" alt="Notes Icon" class="w-8 h-8 inline" /> Attached Notes Preview</span>
+              </div>
+              
+              <div class="space-y-1">
+                <div class="flex items-start gap-2">
+                  <img src="assets/icons/image 28.png" alt="Key Concept Icon" class="w-6 h-6" />
+                  <div class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-600">
+                    <span class="font-semibold">Key Concept:</span> Word problems help us use subtraction in real life
+                  </div>
+                </div>
+                
+                <div class="flex items-start gap-2">
+                  <img src="assets/icons/image 30.png" alt="Key Concept Icon" class="w-6 h-6" />
+                  <span class="text-gray-500 text-lg"></span>
+                  <div class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-600">
+                    <span class="font-semibold">Steps to Solve:</span> 5 steps listed
+                  </div>
+                </div>
+                
+                <div class="flex items-start gap-2">
+                  <img src="assets/icons/image 31.png" alt="Key Concept Icon" class="w-6 h-6" />
+                  <span class="text-orange-500 text-lg"></span>
+                  <div class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-600">
+                    <span class="font-semibold">Example:</span> Maria has 15 apples problem
+                  </div>
+                </div>
+                
+                <div class="flex items-start gap-2">
+                  <img src="assets/icons/image 32.png" alt="Key Concept Icon" class="w-6 h-6" />
+                  <span class="text-yellow-500 text-lg"></span>
+                  <div class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-600">
+                    <span class="font-semibold">Practice Tip:</span> Draw pictures to visualize
+                  </div>
+                </div>
+                
+                <div class="flex items-start gap-2">
+                  <img src="assets/icons/image 34.png" alt="Key Concept Icon" class="w-6 h-6" />
+                  <span class="text-red-500 text-lg"></span>
+                  <div class="font-fredoka font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-gray-600">
+                    <span class="font-semibold">Practice Tip:</span> Draw pictures to visualize
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

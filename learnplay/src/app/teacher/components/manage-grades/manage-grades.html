@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-[#F8F7FF] px-4 sm:px-6 md:px-10 py-6 font-sans">
+  <div class="max-w-full sm:max-w-5xl mx-auto">
+
+    <!-- Header Section -->
+    <div class="mb-6">
+      <a (click)="goBackToContentOverview()" class="inline-flex items-center font-[Fredoka] font-bold text-base sm:text-lg text-[#9333EA] gap-1 mb-2 hover:text-purple-700 cursor-pointer">
+        ← Back to content overview
+      </a>
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 class="font-[Fredoka] font-bold text-[65px] leading-[64px] tracking-[-0.4px] text-[#374151]">
+          Manage Grades
+        </h1>
+
+        <!-- Add Button -->
+        <button 
+  mat-raised-button 
+  (click)="toggleForm()"
+  class="text-white font-bold rounded-[20px] shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-[10px] opacity-100" style="font-family: 'Fredoka'; background: linear-gradient(90deg, #4ADE80 0%, #687AE4 100%); width: 268px; height: 83px; padding: 20px 55px; font-size: 28px; text-align: center; vertical-align: middle;">
+  <span style="font-size: 32px; font-weight: normal; color: #FFFFFF;">+</span> <span style="color: #FFFFFF;">Add Grade</span>
+</button>
+
+      </div>
+
+      <p class="font-[Fredoka] font-normal text-[30px] leading-[39px] tracking-[-0.4px] text-[#374151] mt-2">
+        Create grade levels (e.g., Grade 1, Grade 2)
+      </p>
+    </div>
+
+    <!-- Form Section -->
+    <div [@expandCollapse]="isFormOpen ? 'expanded' : 'collapsed'" class="bg-white shadow-sm border-[5px] border-[#4ADE80] px-4 sm:px-6 py-6 sm:py-[51px] rounded-[23px] space-y-6">
+      <h2 class="font-[Fredoka] font-semibold text-[40px] leading-[40px] tracking-[-0.4px] text-left text-[#374151]">Add New Grade Level</h2>
+
+      <form [formGroup]="gradeForm" (ngSubmit)="saveGrade()">
+        <div class="space-y-6">
+          <!-- Grade Name -->
+          <div>
+            <label class="block font-[Fredoka] font-semibold text-sm sm:text-base text-[#374151] mb-2">Grade Name</label>
+            <mat-form-field appearance="outline" class="w-full custom-mat-field">
+              <input matInput placeholder="e.g Grade 1" formControlName="name">
+            </mat-form-field>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block font-[Fredoka] font-normal text-sm sm:text-base text-[#374151] mb-2">Description</label>
+            <mat-form-field appearance="outline" class="w-full">
+              <textarea matInput placeholder="Brief description..." formControlName="description" rows="3"
+                class="bg-white rounded-md p-3 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <button type="submit" class="bg-[#22c55e] hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors">
+            Save Grade
+          </button>
+          <button type="button" (click)="cancel()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded-lg transition-colors">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Grades List -->
+    <div class="space-y-4 mt-6">
+      <!-- Mobile Layout -->
+      <div class="block md:hidden space-y-4">
+        <div *ngFor="let grade of grades" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+          <!-- Grade Content -->
+          <div class="flex flex-col items-start text-left mb-4">
+            <!-- Hat Icon -->
+            <div class="flex-shrink-0 mb-3">
+              <img src="assets/icons/graduand.png" alt="Graduation Hat" class="w-12 h-12 object-contain" />
+            </div>
+            <div>
+              <h3 class="font-[Fredoka] font-semibold text-[35px] leading-[40px] tracking-[-0.4px] text-left text-[#374151]">{{ grade.name }}</h3>
+              <p class="font-[Fredoka] font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-left text-gray-500 mt-1">{{ grade.description }}</p>
+            </div>
+          </div>
+          <!-- Action Buttons -->
+          <div class="flex gap-3">
+            <button (click)="editGrade(grade)" class="bg-[#E0E7FF] hover:bg-indigo-100 text-[#4F46E5] font-[Fredoka] font-semibold text-[20px] leading-[40px] tracking-[-0.4px] align-middle text-center py-2 px-5 rounded-lg transition-colors">
+              Edit
+            </button>
+            <button (click)="deleteGrade(grade)" class="bg-[#FEE2E2] hover:bg-red-100 text-[#EF4444] font-[Fredoka] font-semibold text-[20px] leading-[40px] tracking-[-0.4px] align-middle text-center py-2 px-5 rounded-lg transition-colors">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Layout -->
+      <div class="hidden md:block space-y-4">
+        <div *ngFor="let grade of grades" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-4">
+          <!-- Hat Icon -->
+          <div class="flex-shrink-0">
+            <img src="assets/icons/graduand.png" alt="Graduation Hat" class="w-12 h-12 object-contain" />
+          </div>
+          <!-- Grade Content -->
+          <div class="flex-1">
+            <h3 class="font-[Fredoka] font-semibold text-[35px] leading-[40px] tracking-[-0.4px] text-left text-[#374151]">{{ grade.name }}</h3>
+            <p class="font-[Fredoka] font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-left text-gray-500 mt-1">{{ grade.description }}</p>
+          </div>
+          <!-- Action Buttons -->
+          <div class="flex gap-3">
+            <button (click)="editGrade(grade)" class="bg-[#E0E7FF] hover:bg-indigo-100 text-[#4F46E5] font-[Fredoka] font-semibold text-[20px] leading-[40px] tracking-[-0.4px] align-middle text-center py-2 px-5 rounded-lg transition-colors">
+              Edit
+            </button>
+            <button (click)="deleteGrade(grade)" class="bg-[#FEE2E2] hover:bg-red-100 text-[#EF4444] font-[Fredoka] font-semibold text-[20px] leading-[40px] tracking-[-0.4px] align-middle text-center py-2 px-5 rounded-lg transition-colors">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Step Section -->
+    <div class="mt-8 bg-[#DCF9EA] border border-[#4ADE80] px-4 sm:px-[30px] py-6 sm:py-[35px] rounded-[23px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h3 class="font-[Fredoka] font-bold text-[35px] leading-[40px] tracking-[-0.4px] text-[#374151]">Next: Create Subjects</h3>
+        <p class="font-[Fredoka] font-normal text-[22px] leading-[39px] tracking-[-0.4px] text-[#374151] text-sm mt-1">After creating grades, create subjects that can be assigned to them</p>
+      </div>
+      <button (click)="nextStep()" class="w-[268px] h-[83px] bg-gradient-to-r from-green-400 to-blue-400 text-white font-[Fredoka] font-bold text-[25px] leading-[43px] tracking-[-0.4px] text-center align-middle rounded-[20px] py-[20px] px-[55px] shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-[10px] opacity-100" style="font-family: 'Fredoka One';">
+        Next Step
+      </button>
+    </div>
+
+  </div>
+</div>
+ 

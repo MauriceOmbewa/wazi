@@ -1,0 +1,169 @@
+<main
+  class="min-h-screen px-4 md:px-12 lg:px-[150px] !bg-gradient-to-b from-[#F5F5FF] to-[#FBF4FC] pb-10"
+>
+  <!-- <div class="max-w-7xl mx-auto"> -->
+  <div class="py-6 md:py-[50px] flex flex-col gap-6 md:gap-[40px]">
+    <!-- Back to units -->
+    <div class="flex flex-col gap-2">
+      <button mat-button (click)="goBack()" class="!px-0 self-start">
+        <h1
+          class="font-fredoka font-bold text-lg md:text-[25px] leading-tight tracking-[-0.4px] text-[#9333EA]"
+        >
+          ← Back to lessons
+        </h1>
+      </button>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <!-- Title Row -->
+
+      <h1
+        class="font-fredoka text-[#9333EA] font-bold text-3xl md:text-5xl lg:text-[50px] leading-tight tracking-[-0.4px]"
+      >
+        {{ contentData.title }}
+      </h1>
+      <p class="font-fredoka font-normal text-[#374151] text-base md:text-[20px] leading-relaxed">
+        {{ contentData.unitName }}
+      </p>
+    </div>
+
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- LEFT COLUMN: Video & Actions (Spans 2 columns) -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        <!-- Video Player -->
+        <div class="w-full aspect-video rounded-2xl overflow-hidden shadow-xl relative bg-black">
+          <!-- Video Placeholder (Before Play) -->
+          <div
+            *ngIf="!isVideoPlaying"
+            (click)="playVideo()"
+            class="w-full h-full bg-[linear-gradient(180deg,_#4F2188_-14.4%,_#372D89_100%)] flex items-center justify-center text-white cursor-pointer hover:shadow-2xl transition-all group z-20"
+          >
+            <div class="flex flex-col items-center gap-3 px-4 text-center">
+              <div
+                class="w-14 h-14 md:w-[86px] md:h-[85px] bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+              >
+                <img src="assets/icons/video.png" class="w-8 h-8 md:w-[30px] md:h-[30px] md:scale-150" />
+              </div>
+              <span
+                class="font-fredoka font-medium text-lg md:text-[22px] tracking-wide"
+              >
+                {{ contentData.videoTitle }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Custom Video Player -->
+          <app-custom-video-player
+            *ngIf="isVideoPlaying"
+            [videoId]="contentData.videoId"
+            [autoplay]="true"
+            (onReady)="onVideoReady()"
+            (onStateChange)="onVideoStateChange($event)">
+          </app-custom-video-player>
+        </div>
+
+        <!-- DYNAMIC ACTION AREA -->
+
+        <!-- STATE 1: Not Complete -->
+        <div
+          *ngIf="!isLessonComplete"
+          class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-6"
+        >
+          <div class="text-center md:text-left">
+            <h2 class="font-fredoka font-bold text-2xl md:text-[35px] leading-tight] tracking-[-0.4px]">
+              Great job watching 🎉
+            </h2>
+            <p class="font-fredoka font-normal text-lg md:text-[22px] tracking-[-0.4px]">
+              Mark this lesson as complete to continue
+            </p>
+          </div>
+
+          <!-- Gradient Button mimicking your SCSS gradient -->
+          <button
+            (click)="markAsComplete()"
+            class="w-full md:w-auto cursor-pointer bg-gradient-to-r from-[#4ADE80] to-[#687AE4] hover:from-green-500 hover:to-green-700 text-white font-bold font-fredoka text-[25px] leading-[43px] tracking-[-0.4px] py-3 px-8 rounded-xl shadow-lg shadow-green-100 transition-transform active:scale-95"
+          >
+            ✓ Mark Complete
+          </button>
+        </div>
+
+        <!-- STATE 2: Lesson Complete -->
+        <div
+          *ngIf="isLessonComplete"
+          class="bg-[#dcfce7] border-2 border-[#4ade80] rounded-2xl p-6 md:p-10 flex flex-col items-center text-center animate-[fadeIn_0.5s_ease-out]"
+        >
+          <!-- Check Circle -->
+          <div
+            class="w-12 h-12 md:w-16 md:h-16 bg-[#B3F6D1] rounded-full flex items-center justify-center text-white mb-4 shadow-sm"
+          >
+            <img src="assets/icons/tick.png" class="w-w-8 h-8 md:w-[42px] md:h-[42px]" />
+          </div>
+
+          <h2
+            class="font-fredoka font-bold text-2xl md:text-[35px] text-[#16A34A] mb-1"
+          >
+            Lesson Complete! 🎉
+          </h2>
+          <p
+            class="text-[#16A34A] font-fredoka font-normal text-lg md:text-[22px] mb-6"
+          >
+            You earned 20 points!
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+            <button
+              (click)="resetLesson()"
+              class="bg-white cursor-pointer text-[#9333EA] hover:bg-slate-50 font-bold font-fredoka text-lg md:text-[25px] py-3 px-8 rounded-xl shadow-sm transition-colors"
+            >
+              Back to Lessons
+            </button>
+            <button
+              class="bg-[linear-gradient(90deg,_#687AE4_0%,_#7452AC_100%)] cursor-pointer hover:bg-[#6a46b0] text-white font-bold font-fredoka text-lg md:text-[25px] py-3 px-8 rounded-xl shadow-md transition-colors"
+            >
+              Next Lesson
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Sidebar Notes -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-3xl p-5 md:p-6  shadow-sm border border-slate-100">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="bg-[#FFF0BF] p-2 rounded-lg">
+              <img src="assets/icons/notepad.png" class="w-8 h-8 md:w-[42px] md:h-[42px]" />
+            </div>
+            <h2 class="text-2xl md:text-[35px] font-[fredoka] font-extrabold text-[#374151]">Lesson Notes</h2>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <!-- Note Items -->
+            <div
+              *ngFor="let note of contentData.notes"
+              class="p-4 md:p-5 rounded-xl border transition-colors hover:shadow-sm"
+              [ngClass]="[note.styles.bg, note.styles.border]"
+            >
+              <h3
+                class="font-semibold font-fredoka text-lg md:text-[25px] flex items-center gap-2 mb-3"
+                [ngClass]="note.styles.iconColor"
+              >
+                <img *ngIf="note.image" [src]="note.image" class="w-5 h-5" />
+                {{ note.title }}
+              </h3>
+
+              <!-- Content Body -->
+              <div
+                class="font-fredoka font-normal text-base md:text-[20px] text-[#374151] leading-relaxed"
+              >
+                <span *ngIf="note.content">{{ note.content }}</span>
+                <span *ngIf="note.htmlContent" [innerHTML]="note.htmlContent"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </div>
+</main>

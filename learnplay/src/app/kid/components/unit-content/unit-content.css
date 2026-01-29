@@ -1,0 +1,20 @@
+/* This adds a subtle blur to the masked areas for a premium look */
+.bg-gradient-to-b, .bg-gradient-to-t {
+  backdrop-filter: blur(10px);
+}
+
+/* When the container is in fullscreen mode */
+#videoContainer:fullscreen {
+  border-radius: 0; /* Remove rounded corners in fullscreen */
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Make shadows deeper/taller in fullscreen mode for better coverage */
+#videoContainer:fullscreen .bg-gradient-to-b {
+  height: 120px;
+}
+
+#videoContainer:fullscreen .bg-gradient-to-t {
+  height: 100px;
+}

@@ -1,0 +1,78 @@
+<main class="bg-[linear-gradient(180deg,#F5F5FF_0%,#FBF4FC_100%)] min-h-screen">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-8 px-[16px] sm:px-[50px] md:px-[100px] lg:px-[150px] py-[20px] md:py-[50px] gap-4 md:gap-0">
+      <div>
+        <h1 class="font-fredoka font-bold text-[32px] md:text-[50px] lg:text-[65px] leading-[36px] md:leading-[54px] lg:leading-[64px] tracking-[-0.4px] text-[#374151] mb-2 md:mb-4">
+          My Children
+        </h1>
+        <p class="font-fredoka font-normal text-[16px] md:text-[24px] lg:text-[30px] leading-[20px] md:leading-[32px] lg:leading-[39px] tracking-[-0.4px] text-[#374151]">
+          Track your children's learning progress
+        </p>        
+      </div>
+      <div class="flex items-center w-full md:w-auto justify-center md:justify-end">
+        <button (click)="onAddChild()" class="bg-gradient-to-r from-[#667DE8] to-[#754DA5] cursor-pointer px-[24px] md:px-[40px] lg:px-[55px] py-[12px] md:py-[16px] lg:py-[20px] rounded-[15px] md:rounded-[20px] flex items-center justify-center gap-2 hover:opacity-90 transition-opacity duration-200 w-full md:w-auto max-w-[300px] md:max-w-none">
+          <span class="font-fredoka font-bold text-[18px] md:text-[22px] lg:text-[25px] text-white whitespace-nowrap">
+            + Add Child
+          </span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Children cards -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8 px-[16px] sm:px-[50px] md:px-[100px] lg:px-[150px] pb-8">
+      <div *ngFor="let child of children" 
+           (click)="onChildClick(child)" 
+           class="bg-[#FFFFFF] rounded-[15px] md:rounded-[20px] lg:rounded-[23px] p-[16px] md:p-[24px] lg:p-[30px] w-full max-w-[523px] mx-auto lg:mx-0 shadow-[0px_6px_30px_0px_#0000001A] cursor-pointer hover:opacity-90 transition-opacity duration-200">
+        <div class="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+          <div class="w-[50px] h-[50px] md:w-[65px] md:h-[65px] lg:w-[79px] lg:h-[79px] bg-custom-gradient rounded-full flex items-center justify-center">
+            <img src="assets/icons/male.png" class="w-[28px] h-[28px] md:w-[35px] md:h-[35px] lg:w-[43px] lg:h-[43px]" alt="male">
+          </div>
+          <div>
+            <h3 class="font-fredoka font-semibold text-[24px] md:text-[30px] lg:text-[35px] leading-[28px] md:leading-[34px] lg:leading-[38px] tracking-[-0.4px] text-[#374151]">
+              {{ child.name }}
+            </h3>            
+            <p class="font-fredoka font-normal text-[16px] md:text-[18px] lg:text-[20px] leading-[20px] md:leading-[28px] lg:leading-[34px] tracking-[-0.4px] text-[#374151]">
+              Age {{ child.age }}
+            </p>
+            
+          </div>
+        </div>
+        
+        <div class="space-y-3 md:space-y-4">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-fredoka font-normal text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#374151]">
+                Overall Progress
+              </span>              
+              <span class="font-fredoka font-semibold text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#374151]">
+                {{ child.progress }}%
+              </span>              
+            </div>
+            <div class="w-full h-[16px] md:h-[18px] lg:h-[21px] rounded-[20px] bg-[#E5E7EB]">
+              <div class="h-[16px] md:h-[18px] lg:h-[21px] rounded-[20px] bg-[linear-gradient(90deg,#FAC815_0%,#F97616_100%)]" [style.width.%]="child.progress"></div>
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="font-fredoka font-normal text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#374151]">
+              Total Points
+            </span>            
+            <div class="flex items-center gap-1">
+              <img src="./assets/icons/star_parent_dashboard.png" class="w-[20px] h-[20px] md:w-[24px] md:h-[24px] lg:w-[26px] lg:h-[26px]"/>
+              <span class="font-fredoka font-semibold text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#E4B936]">
+                {{ child.totalPoints }}
+              </span>              
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center">
+            <span class="font-fredoka font-normal text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#374151]">
+              Active Subjects
+            </span>            
+            <span class="font-fredoka font-semibold text-[14px] md:text-[16px] lg:text-[18px] leading-[18px] md:leading-[24px] lg:leading-[29px] tracking-[-0.4px] text-[#374151]">
+              {{ child.activeSubjects }}
+            </span>            
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
