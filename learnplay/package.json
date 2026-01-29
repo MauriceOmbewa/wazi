@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node dist/learnplay/server/server.mjs",
+    "build": "npx ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:learnplay": "node dist/learnplay/server/server.mjs"
@@ -25,6 +25,7 @@
   "dependencies": {
     "@angular/animations": "^20.3.12",
     "@angular/cdk": "^20.2.14",
+    "@angular/cli": "^20.3.12",
     "@angular/common": "^20.3.12",
     "@angular/compiler": "^20.3.12",
     "@angular/core": "^20.3.12",
