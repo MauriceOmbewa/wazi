@@ -34,7 +34,7 @@
     "@angular/platform-server": "^20.3.12",
     "@angular/router": "^20.3.12",
     "@angular/ssr": "^20.3.12",
-    "@angular/youtube-player": "^21.0.6",
+    "@angular/youtube-player": "^20.2.14",
     "@tinymce/tinymce-angular": "^9.1.1",
     "express": "^5.1.0",
     "google-auth-library": "^10.5.0",
